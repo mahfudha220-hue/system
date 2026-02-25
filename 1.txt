@@ -1,0 +1,19 @@
+cd C:\Users\MI AMOR\Desktop\SYSTEM\backend
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+python manage.py runserver 
+
+if backend fails
+cd C:\Users\MI AMOR\Desktop\SYSTEM\backend
+.\.venv\Scripts\python manage.py migrate
+.\.venv\Scripts\python manage.py runserver 127.0.0.1:8000
+
+
+cd C:\Users\MI AMOR\Desktop\SYSTEM\frontend
+npm.cmd run dev -- --host 127.0.0.1 --port 5173
+
+if frontend fails
+cd C:\Users\MI AMOR\Desktop\SYSTEM\frontend
+npm.cmd install
+npm.cmd run dev 
+
