@@ -1,0 +1,58 @@
+databases:
+  - name: payment-db
+    databaseName: paymentsystem
+    user: paymentsystem_user
+    plan: free
+
+services:
+  - type: web
+    name: payment-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+    startCommand: gunicorn core.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: USE_POSTGRES
+        value: "1"
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: payment-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: payment-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: payment-db
+          property: password
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: payment-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: payment-db
+          property: port
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "0"
+      - key: ALLOWED_HOSTS
+        value: payment-backend.onrender.com
+
+  - type: web
+    name: payment-frontend
+    runtime: static
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        value: https://payment-backend.onrender.com/api
