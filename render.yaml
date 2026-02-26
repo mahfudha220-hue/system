@@ -2,14 +2,13 @@ databases:
   - name: payment-db
     databaseName: paymentsystem
     user: paymentsystem_user
-    plan: free
 
 services:
   - type: web
     name: payment-backend
     runtime: python
     rootDir: backend
-    plan: free
+    plan: starter
     buildCommand: |
       pip install -r requirements.txt
       python manage.py migrate
@@ -50,7 +49,6 @@ services:
     name: payment-frontend
     runtime: static
     rootDir: frontend
-    plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
